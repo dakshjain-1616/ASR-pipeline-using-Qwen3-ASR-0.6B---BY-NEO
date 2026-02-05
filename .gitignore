@@ -13,7 +13,7 @@ dist/
 build/
 *.egg
 
-data/
+
 *.wav
 *.mp3
 *.flac
@@ -53,8 +53,7 @@ checkpoints/
 *.bin
 *.safetensors
 
-outputs/
-results/
+
 experiments/
 
 .mypy_cache/
