@@ -1,0 +1,2 @@
+apt-get update -qq && apt-get install -y portaudio19-dev --quiet 2>&1 | grep -E "(Setting up|done|ERROR)" || echo "Installation attempted"
+cd /root/ASRmodel && source venv/bin/activate && pip install pyaudio soundfile --quiet

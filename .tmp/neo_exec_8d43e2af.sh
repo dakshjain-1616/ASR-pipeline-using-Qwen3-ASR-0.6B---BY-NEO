@@ -1,0 +1,1 @@
+source /root/ASRmodel/venv/bin/activate && pip install streamlit

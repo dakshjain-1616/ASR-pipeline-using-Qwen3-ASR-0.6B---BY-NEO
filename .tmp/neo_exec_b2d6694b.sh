@@ -1,0 +1,1 @@
+cd /root/ASRmodel && source venv/bin/activate && pip install pyaudio soundfile 2>&1 | tail -20

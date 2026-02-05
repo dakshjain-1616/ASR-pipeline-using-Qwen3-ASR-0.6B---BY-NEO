@@ -1,0 +1,1 @@
+/usr/bin/python3 -c "import streamlit; import torch; print('✓ All imports successful'); print(f'✓ Streamlit version: {streamlit.__version__}'); print(f'✓ PyTorch version: {torch.__version__}')"

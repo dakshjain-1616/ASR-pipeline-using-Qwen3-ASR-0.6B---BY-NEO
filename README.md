@@ -41,7 +41,27 @@ pip install transformers accelerate librosa soundfile
 
 ## Usage
 
-### Command-Line Interface (Recommended)
+### Web Interface (Recommended)
+
+Launch the Streamlit web application for browser-based voice recording:
+
+```bash
+source venv/bin/activate
+streamlit run streamlit_app.py
+```
+
+Then open your browser to the URL shown (typically `http://localhost:8501`). The web interface allows you to:
+- Record audio directly through your browser microphone
+- View transcriptions instantly
+- Automatically save all notes to `voice_notes.txt`
+- Bypass server-side audio hardware requirements
+
+**Note:** When running on a remote server, use SSH port forwarding:
+```bash
+ssh -L 8501:localhost:8501 user@server
+```
+
+### Command-Line Interface
 
 The easiest way to transcribe audio files is using the CLI:
 

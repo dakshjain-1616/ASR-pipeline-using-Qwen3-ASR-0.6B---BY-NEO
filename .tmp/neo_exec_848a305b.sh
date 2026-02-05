@@ -1,0 +1,1 @@
+cd /root/ASRmodel && source venv/bin/activate && pip install pyaudio soundfile --quiet 2>&1 | grep -E "(Successfully|error|ERROR)" || echo "Installation attempted"

@@ -1,0 +1,1 @@
+/root/ASRmodel/venv/bin/python -c "import streamlit; print(f'Streamlit {streamlit.__version__} installed successfully')"

@@ -1,0 +1,1 @@
+cd /root/ASRmodel && source venv/bin/activate && /usr/bin/python3 -c "import streamlit; import torch; from src.inference import QwenASRPipeline; print('All imports successful')"

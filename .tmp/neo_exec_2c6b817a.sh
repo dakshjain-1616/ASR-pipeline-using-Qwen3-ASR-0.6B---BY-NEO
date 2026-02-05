@@ -1,0 +1,1 @@
+cat /root/ASRmodel/voice_notes.txt

@@ -1,0 +1,1 @@
+cd /root/ASRmodel && source venv/bin/activate && /usr/bin/python3 -c "import streamlit; import torch; from src.inference import QwenASRPipeline; print('✓ All imports successful'); print(f'✓ Streamlit version: {streamlit.__version__}'); print(f'✓ PyTorch version: {torch.__version__}'); print(f'✓ CUDA available: {torch.cuda.is_available()}')"

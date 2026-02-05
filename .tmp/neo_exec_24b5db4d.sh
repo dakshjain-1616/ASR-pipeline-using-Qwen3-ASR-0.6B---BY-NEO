@@ -1,0 +1,1 @@
+source /root/ASRmodel/venv/bin/activate && /usr/bin/python3 -m py_compile /root/ASRmodel/streamlit_app.py && echo "✓ Syntax check passed"

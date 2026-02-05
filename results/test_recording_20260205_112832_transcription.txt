@@ -1,0 +1,5 @@
+Transcription generated at: 2026-02-05 11:28:32
+Audio source: test_recording
+--------------------------------------------------------------------------------
+
+This is a test transcription from the refactored Streamlit UI.

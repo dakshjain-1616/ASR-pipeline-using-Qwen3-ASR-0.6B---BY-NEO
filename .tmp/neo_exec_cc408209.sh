@@ -1,0 +1,1 @@
+cat /root/ASRmodel/README.md | grep -A 10 "## Usage"

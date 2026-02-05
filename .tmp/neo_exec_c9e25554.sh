@@ -1,0 +1,1 @@
+cd /root/ASRmodel && source venv/bin/activate && /usr/bin/python3 voice_notes.py --simulate-input data/OSR_us_000_0037_8k.wav

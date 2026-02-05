@@ -1,0 +1,1 @@
+source /root/ASRmodel/venv/bin/activate && /usr/bin/python3 -c "import streamlit; print(f'Streamlit version: {streamlit.__version__}')"
