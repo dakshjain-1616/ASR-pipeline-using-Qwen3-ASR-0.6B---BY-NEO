@@ -1,0 +1,1 @@
+cd /root/ASRmodel && source venv/bin/activate && /usr/bin/python3 -c "import sys; sys.path.insert(0, 'src'); from inference import QwenASRPipeline; print('Import successful')"

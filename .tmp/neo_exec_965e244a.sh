@@ -1,0 +1,1 @@
+cd /root/ASRmodel && source venv/bin/activate && which /usr/bin/python3 && /usr/bin/python3 -c "import qwen_asr; print('qwen_asr found'); print(qwen_asr.__file__)"

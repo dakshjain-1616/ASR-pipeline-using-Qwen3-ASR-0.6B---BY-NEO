@@ -1,0 +1,1 @@
+source /root/ASRmodel/venv/bin/activate && /usr/bin/python3 /root/ASRmodel/demo.py

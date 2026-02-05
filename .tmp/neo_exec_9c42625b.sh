@@ -1,0 +1,1 @@
+cd /root/ASRmodel && rm -rf venv && /usr/bin/python3 -m venv venv && ./venv/bin/pip install --no-input qwen-asr torch transformers accelerate librosa soundfile torchaudio

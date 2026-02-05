@@ -1,0 +1,1 @@
+cd /root/ASRmodel && source venv/bin/activate && pip install torch torchaudio transformers accelerate librosa soundfile

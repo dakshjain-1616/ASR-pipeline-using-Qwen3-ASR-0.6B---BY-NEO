@@ -1,0 +1,1 @@
+/root/ASRmodel/venv/bin/python3 /root/ASRmodel/cli.py --audio /root/ASRmodel/data/OSR_us_000_0037_8k.wav

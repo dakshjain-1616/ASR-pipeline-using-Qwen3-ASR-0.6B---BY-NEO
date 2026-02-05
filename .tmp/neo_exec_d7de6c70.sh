@@ -1,0 +1,1 @@
+cd /root/ASRmodel && source venv/bin/activate && /usr/bin/python3 cli.py --audio data/OSR_us_000_0037_8k.wav

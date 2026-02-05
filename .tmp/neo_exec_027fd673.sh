@@ -1,0 +1,1 @@
+cd /root/ASRmodel && ls -lh cli.py demo.py src/inference.py README.md

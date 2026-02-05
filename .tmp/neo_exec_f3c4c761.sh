@@ -1,0 +1,1 @@
+cd /root/ASRmodel && ./venv/bin/python cli.py --audio data/sample_audio.flac

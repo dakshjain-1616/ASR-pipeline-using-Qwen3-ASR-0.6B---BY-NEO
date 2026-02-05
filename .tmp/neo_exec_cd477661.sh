@@ -1,0 +1,1 @@
+cd /root/ASRmodel && echo "=== PROJECT STRUCTURE ===" && ls -lh && echo -e "\n=== CLI HELP ===" && ./venv/bin/python cli.py --help 2>&1 | head -15

@@ -1,0 +1,1 @@
+cd /root/ASRmodel && ./venv/bin/python demo.py

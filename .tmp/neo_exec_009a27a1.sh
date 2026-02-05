@@ -1,0 +1,1 @@
+cd /root/ASRmodel && mkdir -p src data

@@ -1,0 +1,7 @@
+qwen-asr
+torch
+torchaudio
+librosa
+scipy
+accelerate
+soundfile

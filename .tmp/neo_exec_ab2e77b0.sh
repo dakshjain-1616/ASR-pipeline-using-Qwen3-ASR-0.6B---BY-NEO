@@ -1,0 +1,1 @@
+ls -la /root/ASRmodel/ | grep -E "^-" && echo "---" && cat /root/ASRmodel/.gitignore | head -20
