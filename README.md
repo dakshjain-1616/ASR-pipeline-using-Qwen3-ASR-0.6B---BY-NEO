@@ -1,6 +1,18 @@
-# Qwen3-ASR-0.6B Automatic Speech Recognition Pipeline
+# Qwen3-ASR-0.6B Automatic Speech Recognition Pipeline by NEO
 
-A production-ready ASR pipeline leveraging the Qwen3-ASR-0.6B model for efficient speech-to-text transcription.
+## 🎯 How NEO Tackled the Problem
+
+Speech recognition on edge devices requires balancing accuracy, speed, and resource constraints:
+
+- **Edge Device Constraints**: Full-size ASR models (1B+ parameters) are too heavy for edge deployment. NEO selected the Qwen3-ASR-0.6B model, achieving production-quality transcription with only 0.6B parameters and ~3GB storage footprint.
+
+- **Hardware Flexibility**: Users have varying hardware setups (GPU/CPU, local/remote). NEO implemented automatic device detection with CUDA acceleration and CPU fallback, ensuring seamless operation across environments.
+
+- **Audio Format Compatibility**: Real-world audio comes in multiple formats (WAV, MP3, FLAC) with varying sample rates. NEO integrated librosa-based preprocessing with automatic resampling, handling format conversion transparently.
+
+- **Remote Server Accessibility**: Server-based ASR typically requires audio hardware on the backend. NEO built a Streamlit web interface with browser-based microphone recording, bypassing server-side audio dependencies entirely.
+
+- **Production Usability**: Research models often lack user-friendly interfaces. NEO created both a CLI for batch processing and a web UI for interactive use, with automatic output management and clear error handling.
 
 ## Features
 
@@ -9,272 +21,156 @@ A production-ready ASR pipeline leveraging the Qwen3-ASR-0.6B model for efficien
 - 🎵 Multi-format audio support (WAV, MP3, FLAC)
 - 🔧 Automatic audio preprocessing and resampling
 - 📦 Simple API with minimal configuration
+- 🌐 Browser-based recording via Streamlit web interface
 
-## Requirements
-
-- Python 3.8+
-- CUDA-capable GPU (optional, recommended)
-- 4GB+ RAM (8GB+ recommended)
-- ~3GB storage for model weights
-
-## Installation
-
-### 1. Clone and Setup Environment
-
+## Quick Start
 ```bash
+# Setup
 cd /root/ASRmodel
 python3 -m venv venv
 source venv/bin/activate
-```
-
-### 2. Install Dependencies
-
-```bash
 pip install -r requirements.txt
+
+# Web Interface (Recommended)
+streamlit run streamlit_app.py
+
+# CLI Usage
+python cli.py --audio data/OSR_us_000_0037_8k.wav
 ```
 
-**Note:** The installation includes PyTorch with CUDA support. For CPU-only:
+## 📡 Usage
+
+### Web Interface
 ```bash
-pip install torch torchaudio --index-url https://download.pytorch.org/whl/cpu
-pip install transformers accelerate librosa soundfile
-```
-
-## Usage
-
-### Web Interface (Recommended)
-
-Launch the Streamlit web application for browser-based voice recording:
-
-```bash
-source venv/bin/activate
 streamlit run streamlit_app.py
 ```
 
-Then open your browser to the URL shown (typically `http://localhost:8501`). The web interface allows you to:
-- Record audio directly through your browser microphone
-- View transcriptions instantly
-- Automatically save all notes to `voice_notes.txt`
-- Bypass server-side audio hardware requirements
+Features:
+- Record audio directly in browser
+- Instant transcription display
+- Auto-save to `voice_notes.txt`
+- No server-side audio hardware needed
 
-**Note:** When running on a remote server, use SSH port forwarding:
+**Remote Server:** Use SSH port forwarding:
 ```bash
 ssh -L 8501:localhost:8501 user@server
 ```
 
 ### Command-Line Interface
-
-The easiest way to transcribe audio files is using the CLI:
-
 ```bash
-python cli.py --audio path/to/your/audio.wav
-```
+# Basic transcription
+python cli.py --audio path/to/audio.wav
 
-**Quick Examples:**
-
-```bash
-# Transcribe the sample audio (saves to ./results/ by default)
-python cli.py --audio data/OSR_us_000_0037_8k.wav
-
-# Transcribe your own audio file
-python cli.py --audio /path/to/recording.mp3
-
-# Specify custom output directory
-python cli.py --audio myfile.wav --output-dir ./my_transcriptions
+# Custom output directory
+python cli.py --audio audio.mp3 --output-dir ./transcriptions
 
 # Force CPU usage
-python cli.py --audio myfile.wav --device cpu
-
-# Use custom model checkpoint
-python cli.py --audio audio.flac --model-path /path/to/model
+python cli.py --audio audio.flac --device cpu
 ```
 
-**CLI Options:**
-- `--audio`: Path to audio file (required)
-- `--output-dir`: Directory to save transcription results (default: `./results`)
-- `--device`: Device (`auto`, `cuda`, or `cpu`). Default: `auto`
-- `--model-path`: Model identifier or local path. Default: `Qwen/Qwen3-ASR-0.6B`
-- `--help`: Show all options
-
-### Output Files
-
-Transcriptions are automatically saved to the specified output directory (default: `./results/`). Each transcription file is named based on the input audio file:
-
-- Input: `myaudio.wav` → Output: `./results/myaudio_transcription.txt`
-- Input: `data/recording.mp3` → Output: `./results/recording_transcription.txt`
-
-The output directory is created automatically if it doesn't exist.
-
-**Example Workflow:**
-
-```bash
-# Step 1: Run transcription on your audio file
-python cli.py --audio /path/to/your/audio.wav
-
-# Step 2: Check the results folder
-ls -lh ./results/
-
-# Step 3: View the transcription
-cat ./results/audio_transcription.txt
-```
-
-### Quick Start (Demo)
-
-Run the demo script to verify installation:
-
-```bash
-python demo.py
-```
-
-This will:
-1. Download a sample audio file
-2. Load the Qwen3-ASR-0.6B model
-3. Transcribe the audio
-4. Display the transcription result
-
-### Library Usage
-
+### Python API
 ```python
 from src.inference import QwenASRPipeline
 
-asr = QwenASRPipeline(
-    model_name="Qwen/Qwen3-ASR-0.6B",
-    device="cuda"  # or "cpu"
-)
-
-transcription = asr.transcribe("path/to/audio.wav")
-print(f"Transcription: {transcription}")
+asr = QwenASRPipeline(model_name="Qwen/Qwen3-ASR-0.6B", device="cuda")
+transcription = asr.transcribe("audio.wav")
+print(transcription)
 ```
 
-### Advanced Options
-
-```python
-transcription = asr.transcribe(
-    audio_path="audio.mp3",
-    language="en",  # Optional language hint
-    return_timestamps=False  # Enable word-level timestamps
-)
-```
-
-### Batch Processing
-
-```python
-from pathlib import Path
-
-audio_files = Path("data").glob("*.wav")
-for audio_file in audio_files:
-    result = asr.transcribe(str(audio_file))
-    print(f"{audio_file.name}: {result}")
-```
-## Project Structure
-
-```
-```
-ASRmodel/
-├── src/
-│   └── inference.py       # ASR inference engine
-├── data/                  # Sample audio files
-│   └── OSR_us_000_0037_8k.wav
-├── results/               # Transcription outputs (auto-created)
-├── cli.py                 # Command-line interface
-├── demo.py                # Verification demo
-├── requirements.txt       # Python dependencies
-├── README.md              # This file
-└── .gitignore            # Git exclusions
-```
-```
-- **Model:** Qwen/Qwen3-ASR-0.6B
-- **Source:** https://huggingface.co/Qwen/Qwen3-ASR-0.6B
-- **Parameters:** 0.6 billion
-- **Architecture:** Transformer-based ASR
-- **License:** Check Hugging Face model card
-
-## Performance
+## 📊 Performance
 
 - **GPU (Tesla V100):** ~0.1-0.5s per second of audio
 - **CPU:** ~1-3s per second of audio
 - **Memory:** ~2-3GB VRAM (GPU) / ~4GB RAM (CPU)
 
-## Troubleshooting
+## 🔧 Extending with NEO
 
-### Audio File Not Found
+Enhance this ASR pipeline using **NEO**, an AI-powered development assistant:
 
-Verify the file path is correct:
-```bash
-ls -lh path/to/audio.wav
-python cli.py --audio "$(pwd)/audio.wav"
+### Getting Started with NEO
+
+1. **Install the NEO VS Code Extension**
+   
+   [**NEO VS Code Extension**](https://marketplace.visualstudio.com/items?itemName=NeoResearchInc.heyneo)
+
+2. **Use NEO to Extend Functionality**
+   
+   - **Multi-language support**: Add language detection and multilingual transcription
+   - **Speaker diarization**: Identify and separate multiple speakers in audio
+   - **Real-time streaming**: Implement WebSocket-based live transcription
+   - **Custom vocabulary**: Add domain-specific terms for medical/legal/technical use
+   - **Noise reduction**: Integrate audio enhancement for noisy environments
+   - **Batch processing**: Create parallel processing for large audio datasets
+   - **REST API**: Build FastAPI endpoints for production deployment
+   - **Subtitle generation**: Auto-generate SRT/VTT files with timestamps
+
+3. **Example NEO Prompts**
+```
+   "Add speaker diarization to identify multiple speakers in conversations"
+   
+   "Create a FastAPI endpoint for remote transcription requests"
+   
+   "Implement real-time streaming transcription via WebSocket"
+   
+   "Add support for Spanish and French language transcription"
+   
+   "Build a batch processing script for transcribing entire directories"
+   
+   "Integrate noise reduction preprocessing using noisereduce library"
+   
+   "Create SRT subtitle file generation with word-level timestamps"
+   
+   "Add confidence scoring for transcription quality assessment"
 ```
 
-### CUDA Out of Memory
+4. **Advanced Use Cases**
+   
+   - **Meeting Transcription**: Build automated meeting notes with speaker labels
+   - **Podcast Production**: Create searchable transcripts for audio content
+   - **Accessibility Tools**: Generate live captions for video streaming
+   - **Call Center Analytics**: Transcribe and analyze customer support calls
+   - **Legal Documentation**: Transcribe court proceedings and depositions
+   - **Medical Dictation**: Convert doctor notes to structured EHR entries
+   - **Language Learning**: Build pronunciation assessment tools
+   - **Voice Search**: Enable voice-controlled application interfaces
 
-If you encounter OOM errors, use CPU mode:
+### Learn More About NEO
+
+Visit [heyneo.so](https://heyneo.so/) to explore additional features.
+
+## 📂 Project Structure
+```
+ASRmodel/
+├── src/
+│   └── inference.py       # ASR inference engine
+├── data/                  # Sample audio files
+├── results/               # Transcription outputs
+├── cli.py                 # Command-line interface
+├── streamlit_app.py       # Web interface
+├── demo.py                # Verification demo
+└── requirements.txt       # Dependencies
+```
+
+## 🐛 Troubleshooting
+
+**CUDA Out of Memory:**
 ```bash
 python cli.py --audio audio.wav --device cpu
 ```
 
-Or in Python:
-```python
-asr = QwenASRPipeline(model_name="Qwen/Qwen3-ASR-0.6B", device="cpu")
-```
-
-### Audio Format Not Supported
-
-Ensure `ffmpeg` is installed for MP3/other formats:
+**Audio Format Issues:**
 ```bash
 sudo apt-get install ffmpeg
 ```
 
-### Model Download Issues
-
-If download fails, manually cache the model:
+**Model Download:**
 ```bash
 huggingface-cli download Qwen/Qwen3-ASR-0.6B
 ```
 
-## Development
+## 📜 License
 
-### Running Tests
-
-```bash
-python -m pytest tests/
-```
-
-### Code Quality
-
-```bash
-pip install black flake8
-black src/ demo.py
-flake8 src/ demo.py
-```
-
-## Contributing
-
-Contributions welcome! Please ensure:
-- Code follows PEP 8 style guidelines
-- New features include tests
-- Documentation is updated
-
-## License
-
-This project uses the Qwen3-ASR-0.6B model. Please refer to the [official model card](https://huggingface.co/Qwen/Qwen3-ASR-0.6B) for licensing terms.
-
-## Citation
-
-If you use this pipeline in research, please cite:
-
-```bibtex
-@software{qwen3_asr_pipeline,
-  title = {Qwen3-ASR-0.6B Pipeline},
-  year = {2026},
-  url = {https://github.com/yourusername/ASRmodel}
-}
-```
-
-## Support
-
-For issues or questions:
-- Check [Troubleshooting](#troubleshooting) section
-- Review Qwen3-ASR model documentation
-- Open an issue on GitHub
+Uses Qwen3-ASR-0.6B model. See [model card](https://huggingface.co/Qwen/Qwen3-ASR-0.6B) for licensing.
 
 ---
 
